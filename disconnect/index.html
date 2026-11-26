@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Disconnect — offline apps by SkachCorp</title>
+    <meta
+      name="description"
+      content="No accounts, no cloud, no tracking. Disconnect makes small offline-first iOS apps, built properly for today. First up: GymPal."
+    />
+    <meta name="theme-color" content="#000000" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ctext x='32' y='45' font-family='-apple-system,Segoe UI,sans-serif' font-size='36' font-weight='600' fill='%23fff' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        --ink: #f5f5f7;
+        --muted: #a1a1a6;
+        --dim: #86868b;
+        --layer: #0f0f12;
+        --line: rgba(255, 255, 255, 0.1);
+        --blue: #0071e3;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        background: #000;
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI',
+          'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 17px;
+        line-height: 1.47;
+        letter-spacing: -0.01em;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      h1,
+      h2,
+      h3,
+      p,
+      figure {
+        margin: 0;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      section {
+        scroll-margin-top: 60px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Nav */
+
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .nav-inner {
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .brand {
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        font-size: 12.5px;
+        letter-spacing: 0;
+        color: var(--muted);
+      }
+
+      .nav-links a {
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--ink);
+      }
+
+      .nav-links .out {
+        padding: 6px 14px;
+        border-radius: 980px;
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--ink);
+      }
+
+      .nav-links .out:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Hero */
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(84px, 13vw, 148px) 24px clamp(56px, 8vw, 92px);
+        text-align: center;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: -46%;
+        left: 50%;
+        width: min(1100px, 150%);
+        height: 760px;
+        transform: translateX(-50%);
+        background: radial-gradient(42% 50% at 34% 46%, rgba(0, 113, 227, 0.3), transparent 70%),
+          radial-gradient(42% 50% at 68% 54%, rgba(180, 92, 240, 0.26), transparent 72%);
+        filter: blur(38px);
+        pointer-events: none;
+      }
+
+      .hero .container {
+        position: relative;
+      }
+
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--dim);
+      }
+
+      h1 {
+        margin: 18px auto 0;
+        max-width: 18ch;
+        font-size: clamp(2.6rem, 7.8vw, 5.4rem);
+        font-weight: 600;
+        letter-spacing: -0.045em;
+        line-height: 1.02;
+      }
+
+      h1 span {
+        background: linear-gradient(96deg, #0a84ff 8%, #6b5cf0 58%, #c86cf0 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .lede {
+        margin: 22px auto 0;
+        max-width: 48ch;
+        font-size: clamp(1.05rem, 2vw, 1.3rem);
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 32px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 26px;
+        border-radius: 980px;
+        background: var(--blue);
+        color: #fff;
+        font-size: 16px;
+        transition: background 0.25s ease, transform 0.25s ease;
+      }
+
+      .btn:hover {
+        background: #0077ed;
+        transform: translateY(-1px);
+      }
+
+      .link {
+        font-size: 16px;
+        color: #2997ff;
+      }
+
+      .link:hover {
+        text-decoration: underline;
+      }
+
+      /* Product */
+
+      .product {
+        padding: clamp(64px, 9vw, 110px) 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .product-grid {
+        display: grid;
+        gap: clamp(36px, 5vw, 52px);
+        align-items: center;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 980px;
+        border: 1px solid var(--line);
+        font-size: 11.5px;
+        letter-spacing: 0.02em;
+        color: #d2d2d7;
+      }
+
+      .product-copy h2 {
+        margin-top: 18px;
+        font-size: clamp(2.2rem, 5.2vw, 3.6rem);
+        font-weight: 600;
+        letter-spacing: -0.042em;
+        line-height: 1.03;
+      }
+
+      .tagline {
+        margin-top: 8px;
+        font-size: clamp(1.1rem, 2vw, 1.35rem);
+        color: #d2d2d7;
+      }
+
+      .body {
+        margin-top: 18px;
+        max-width: 42ch;
+        line-height: 1.58;
+        color: var(--muted);
+      }
+
+      .points {
+        display: grid;
+        gap: 10px;
+        margin: 24px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .points li {
+        position: relative;
+        padding-left: 20px;
+        font-size: 14.5px;
+        color: #c7c7cc;
+      }
+
+      .points li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.52em;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0a84ff, #c86cf0);
+      }
+
+      /* Screenshot placeholders */
+
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: end;
+        gap: 12px;
+        width: 100%;
+        max-width: 430px;
+        margin-inline: auto;
+      }
+
+      .shot:nth-child(2) {
+        transform: translateY(-16px);
+      }
+
+      .phone {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        aspect-ratio: 9 / 19;
+        padding: 18px 11px 12px;
+        overflow: hidden;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        background: linear-gradient(165deg, #23242a 0%, #111216 55%, #191a20 100%);
+        box-shadow: 0 28px 60px -34px rgba(0, 0, 0, 0.95),
+          inset 0 1px 0 rgba(255, 255, 255, 0.07);
+      }
+
+      .phone::before {
+        content: '';
+        position: absolute;
+        top: 7px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30%;
+        height: 4px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .phone-img {
+        display: block;
+        width: 100%;
+        padding: 0;
+        border-radius: 22px;
+        object-fit: cover;
+      }
+
+      .sk-label {
+        margin-top: 12px;
+        height: 5px;
+        width: 40%;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .sk-title {
+        height: 11px;
+        width: 66%;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .sk-ring {
+        width: 54%;
+        aspect-ratio: 1;
+        margin: 12% auto 4%;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 0.09);
+        border-top-color: rgba(10, 132, 255, 0.85);
+        border-right-color: rgba(200, 108, 240, 0.7);
+      }
+
+      .sk-row {
+        height: 15px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .sk-row.short {
+        width: 62%;
+      }
+
+      .shot figcaption {
+        margin-top: 12px;
+        text-align: center;
+        font-size: 11.5px;
+        letter-spacing: 0;
+        color: var(--dim);
+      }
+
+      /* Features */
+
+      .features {
+        display: grid;
+        gap: 14px;
+        margin-top: clamp(48px, 6vw, 72px);
+      }
+
+      .feature {
+        padding: 26px 24px;
+        border-radius: 20px;
+        background: var(--layer);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .feature h3 {
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .feature p {
+        margin-top: 8px;
+        font-size: 14.5px;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+
+      /* More */
+
+      .more {
+        padding: clamp(64px, 9vw, 108px) 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .more-title {
+        font-size: clamp(1.9rem, 4.4vw, 2.8rem);
+        font-weight: 600;
+        letter-spacing: -0.038em;
+      }
+
+      .more .lede {
+        margin: 12px 0 0;
+        max-width: 46ch;
+        font-size: 17px;
+      }
+
+      .ghosts {
+        display: grid;
+        gap: 14px;
+        margin-top: 34px;
+      }
+
+      .ghost {
+        padding: 26px;
+        border-radius: 20px;
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+      }
+
+      .ghost-tag {
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #6e6e73;
+      }
+
+      .ghost h3 {
+        margin-top: 10px;
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: #d2d2d7;
+      }
+
+      .ghost p {
+        margin-top: 6px;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--dim);
+      }
+
+      /* Footer */
+
+      .footer {
+        padding: 26px 0 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 12.5px;
+        color: var(--dim);
+      }
+
+      .footer-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .footer-links a:hover {
+        color: var(--ink);
+      }
+
+      @media (min-width: 760px) {
+        .features {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
+
+        .ghosts {
+          grid-template-columns: 1fr 1fr;
+          gap: 18px;
+        }
+      }
+
+      @media (min-width: 880px) {
+        .product-grid {
+          grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+          gap: clamp(40px, 5vw, 72px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .btn:hover {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="container nav-inner">
+        <a class="brand" href="./">Disconnect</a>
+        <nav class="nav-links" aria-label="Sections">
+          <a href="#gympal">GymPal</a>
+          <a href="#more">More</a>
+          <a class="out" href="https://skachcorp.ca/">SkachCorp</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <p class="eyebrow">Disconnect · by SkachCorp</p>
+          <h1>Old-school apps, <span>done right.</span></h1>
+          <p class="lede">
+            No accounts. No cloud. No tracking. Just small apps that live on your phone and keep
+            working with the Wi-Fi off — the way software used to feel, built properly for today.
+            First up: GymPal.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#gympal">Meet GymPal</a>
+            <a class="link" href="https://skachcorp.ca/">skachcorp.ca <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="product" id="gympal">
+        <div class="container">
+          <div class="product-grid">
+            <div class="product-copy">
+              <span class="badge">01 · Coming soon for iOS</span>
+              <h2>GymPal</h2>
+              <p class="tagline">Your training. On your phone.</p>
+              <p class="body">
+                A quiet gym companion that plans the session, keeps the sets and asks for nothing
+                in return. No sign-up at the door, no signal required, no data leaving the device —
+                basements, busy gyms and flights all work the same.
+              </p>
+              <ul class="points">
+                <li>Every screen works in airplane mode</li>
+                <li>No account — open it and train</li>
+                <li>History stays on your phone, not on a server</li>
+              </ul>
+            </div>
+
+            <!-- Screenshot placeholders. To use the real iOS captures, replace each
+                 <div class="phone">…</div> with:
+                 <img class="phone phone-img" src="gympal-today.png" alt="GymPal Today screen" />
+                 Drop the PNGs next to this file and they will resolve at any URL. -->
+            <div class="shots">
+              <figure class="shot">
+                <div class="phone" aria-hidden="true">
+                  <span class="sk-label"></span>
+                  <span class="sk-title"></span>
+                  <span class="sk-ring"></span>
+                  <span class="sk-row"></span>
+                  <span class="sk-row"></span>
+                  <span class="sk-row short"></span>
+                </div>
+                <figcaption>Today</figcaption>
+              </figure>
+
+              <figure class="shot">
+                <div class="phone" aria-hidden="true">
+                  <span class="sk-label"></span>
+                  <span class="sk-title"></span>
+                  <span class="sk-row"></span>
+                  <span class="sk-row"></span>
+                  <span class="sk-row"></span>
+                  <span class="sk-row short"></span>
+                </div>
+                <figcaption>Session</figcaption>
+              </figure>
+
+              <figure class="shot">
+                <div class="phone" aria-hidden="true">
+                  <span class="sk-label"></span>
+                  <span class="sk-title"></span>
+                  <span class="sk-row"></span>
+                  <span class="sk-row"></span>
+                  <span class="sk-row"></span>
+                  <span class="sk-row short"></span>
+                </div>
+                <figcaption>Progress</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div class="features">
+            <article class="feature">
+              <h3>Offline by default</h3>
+              <p>
+                The whole app is on the phone. Plans, logging and history work with no signal,
+                because nothing is waiting on a server.
+              </p>
+            </article>
+            <article class="feature">
+              <h3>No account, no wall</h3>
+              <p>
+                Open it and start. No email, no password, nothing to sign into and nothing to
+                recover later.
+              </p>
+            </article>
+            <article class="feature">
+              <h3>Private because it can be</h3>
+              <p>
+                Workout data never leaves the device — no analytics SDKs, no ad trackers, no cloud
+                backup you didn't ask for.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="more" id="more">
+        <div class="container">
+          <h2 class="more-title">More to come.</h2>
+          <p class="lede">
+            Every app under Disconnect follows the same three rules: offline, account-free, and
+            yours.
+          </p>
+          <div class="ghosts">
+            <article class="ghost">
+              <span class="ghost-tag">Next up</span>
+              <h3>In the works</h3>
+              <p>The second Disconnect app is taking shape — same rules, different job.</p>
+            </article>
+            <article class="ghost">
+              <span class="ghost-tag">Later</span>
+              <h3>Unannounced</h3>
+              <p>More old-school tools rebuilt for today, whenever an idea earns it.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>© <span id="year">2026</span> Disconnect · a SkachCorp project</span>
+        <div class="footer-links">
+          <a href="https://skachcorp.ca/">SkachCorp.ca</a>
+          <a href="mailto:martinskachkov@skachcorp.ca">Email</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear()
+    </script>
+  </body>
+</html>

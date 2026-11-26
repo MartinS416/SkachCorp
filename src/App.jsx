@@ -82,6 +82,7 @@ function App() {
             <div className="nav-links">
               <a href="#services">Services</a>
               <a href="#approach">Approach</a>
+              <a href="disconnect/">Disconnect</a>
               <a href="#contact">Contact</a>
             </div>
             <a className="pill" href="#contact">
